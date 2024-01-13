@@ -6,8 +6,6 @@ namespace H1_ClientServerApp
 {
     internal class Chat
     {
-
-
         public static void Server()
         {
             IPEndPoint remoteEP = new IPEndPoint(IPAddress.Any, 0);
@@ -21,15 +19,24 @@ namespace H1_ClientServerApp
                     byte[] buffer = udpClient.Receive(ref remoteEP);
                     string jsonText = Encoding.UTF8.GetString(buffer);
 
-                    Message? message = Message.FromJson(jsonText);
-                    if (message != null)
+                    if (jsonText is "Exit")
                     {
-                        Console.WriteLine(message);
-                        Message serverMessage = new Message("Server", "Сообщение получено!");
-                        string js = serverMessage.ToJson();
-                        byte[] bytes = Encoding.UTF8.GetBytes(js);
-                        udpClient.Send(bytes, remoteEP);
+                        Console.WriteLine("Сервер завершил работу");
+                        break;
                     }
+
+                    new Thread(() =>
+                    {
+                        Message? message = Message.FromJson(jsonText);
+                        if (message != null)
+                        {
+                            Console.WriteLine(message);
+                            Message serverMessage = new Message("Server", "Сообщение получено!");
+                            string js = serverMessage.ToJson();
+                            byte[] bytes = Encoding.UTF8.GetBytes(js);
+                            udpClient.Send(bytes, remoteEP);
+                        }                      
+                    }).Start();
                 }
                 catch (Exception e)
                 {
@@ -43,12 +50,15 @@ namespace H1_ClientServerApp
             IPEndPoint remoteEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 12345);
             UdpClient udpClient = new UdpClient(12346);
 
+            udpClient.Send(Encoding.UTF8.GetBytes("hi"), remoteEP);
+
             while (true)
             {
                 Console.Write("Введите сообщение: ");
                 string text = Console.ReadLine();
-                if (string.IsNullOrEmpty(text))
+                if (text is "Exit")
                 {
+                    udpClient.Send(Encoding.UTF8.GetBytes(text), remoteEP);
                     break;
                 }
                 Message message = new Message(nickName, text);
