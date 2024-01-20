@@ -55,7 +55,7 @@ namespace H1_ClientServerApp
             IPEndPoint remoteEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 12345);
             UdpClient udpClient = new UdpClient(12346);
             
-            udpClient.Send(Encoding.UTF8.GetBytes("hi"), remoteEP);
+            //udpClient.Send(Encoding.UTF8.GetBytes("hi"), remoteEP);
 
             while (true)
             {
@@ -63,7 +63,7 @@ namespace H1_ClientServerApp
                 string text = Console.ReadLine();
 
                 if (text is "Exit")
-                    await udpClient.SendAsync(Encoding.UTF8.GetBytes(text), remoteEP, ct);
+                    await udpClient.SendAsync(Encoding.UTF8.GetBytes(text), remoteEP);
                    
                 Message message = new Message(nickName, text);
                 string js = message.ToJson();
