@@ -7,7 +7,7 @@ if (args.Length == 0)
 }
 else
 {
-    await Chat.Client(args[0]);
+    await Chat.Client(args[0], args[1]);
 }
 
 
