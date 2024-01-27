@@ -104,11 +104,8 @@ namespace H5_EntityHomeWork
                 RelyMessage(message);
             }
         }
-
-
         public void Work()
         {
-
             IPEndPoint remoteEndPoint;
 
             //udpClient = new UdpClient(12345);
@@ -135,7 +132,6 @@ namespace H5_EntityHomeWork
                     Console.WriteLine("Ошибка при обработке сообщения: " + ex.Message);
                 }
             }
-
         }
     }
 }

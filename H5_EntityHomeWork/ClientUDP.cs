@@ -43,6 +43,10 @@ namespace H5_EntityHomeWork
             MessageUDP hiMessage = new MessageUDP { FromName = Name, ToName = "Server", Text = "register", Command = Command.Register };
             await client.SendAsync(Encoding.ASCII.GetBytes(hiMessage.ToJson()), remoteEP);
 
+            /** Метод 'GetMessages' проверяет наличие непрочитанных сообщений и возвращает 'bool' и список 'MessageUDP'
+             * если 'bool = true' выводит каждое непрочитанное сообщение на консоль
+             * и отправляет каждое сообщение на 'Server' с командой 'Command = Confirmation' для подтверждения получения сообщения**/
+
             if (GetMessages(out List<MessageUDP> msgs))
             {
                 Console.Write("Есть непрочитанные сообщения!\nпрочитать 'yes' или 'no': ");
@@ -100,7 +104,7 @@ namespace H5_EntityHomeWork
             recipient.Wait();
 
         }
-
+        /** Метод 'GetMessages' проверяет наличие непрочитанных сообщений и возвращает 'bool' и список 'MessageUDP'**/
         private bool GetMessages(out List<MessageUDP> msgs)
         {
             bool result = false;
